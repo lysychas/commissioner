@@ -1,5 +1,6 @@
 const express = require('express');
 const fetch = require('node-fetch');
+
 const app = express();
 
 app.use(express.json());
@@ -14,12 +15,17 @@ app.get('/', function (req, res) {
 app.post('/transaction', function (req, res) {
   const reqData = req.body;
   convertToEUR(reqData.currency).then((rate) => {
-    const CM = new CommissionManager(reqData.client_id, reqData.amount / rate);
-    const commission = CM.getCommission();
-    res.send({
-      amount: commission,
-      currency: 'EUR',
-    });
+    const CM = new CommissionManager(
+      reqData.client_id,
+      reqData.amount / rate,
+      reqData.date
+    );
+    CM.getCommission().then((data) =>
+      res.send({
+        amount: data,
+        currency: 'EUR',
+      })
+    );
   });
 });
 

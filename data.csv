@@ -7,3 +7,4 @@ client_id,date,amount,currency,commission_amount,commission_currency
 1,2021-02-01,500.00,EUR,2.50,EUR
 1,2021-02-02,100.00,EUR,0.50,EUR
 42,2021-02-02,2000.00,EUR,0.05,EUR
+2,2021-01-02,100.00,EUR,0.50,EUR

@@ -1,51 +1,70 @@
 const parseCSV = require('./parsecsv');
 
 class CommissionManager {
-  constructor(clientId, amount) {
+  constructor(clientId, amount, date) {
     this.commissionPercentage = 0.005;
     this.turnoverCommission = 0.04;
     this.turnoverAmount = 1000;
     this.amount = amount;
     this.commission = amount * this.commissionPercentage;
     this.clientId = clientId;
-    this.data = parseCSV();
+    this.date = date;
+
+    // TODO
+    // array of rules
+    // vienas kintamasis atsakingas už rules
+
+    // Validation rules
+
   }
 
-  showData() {
-    this.data.forEach((obj) => {
-      console.log(obj);
-    });
+  async showData() {
+    const records = await parseCSV();
+    return records;
   }
 
-  // TODO
-  // array of rules
-  // vienas kitamasis atsakingas už rules
+  checkIfAmountLessThan5Cent() {
+    if (this.amount <= 0.05) {
+      this.commission = 0.01;
+      return true;
+    }
+  }
 
-  checkIfLessThan1Cent() {
-    if (this.commission < 0.01) {
-      return new Error(
-        'Commission is less than 0.01 EUR, please increase the amount'
-      );
+  checkIfCommissionLessThan5Cent() {
+    if (this.commission < 0.05) {
+      this.commission = 0.05;
     }
   }
 
   checkClientID() {
     if (this.clientId === 42) {
       this.commission = 0.05;
+      return true;
     }
   }
 
-  checkTurnover() {
-    if (this.amount >= this.turnoverAmount) {
-      this.commission = this.turnoverCommission;
-    }
+  async checkTurnover() {
+    await this.showData().then((data) => {
+      const date = this.date.slice(0, -3);
+      const entryExists = typeof data[this.clientId];
+      if (entryExists != 'undefined') {
+        if (this.amount + data[this.clientId][date] >= this.turnoverAmount) {
+          this.commission = this.turnoverCommission;
+        }
+      } else {
+        if (this.amount >= this.turnoverAmount) {
+          this.commission = this.turnoverCommission;
+        }
+      }
+    });
+    return this.commission;
   }
 
-  getCommission() {
-    this.checkIfLessThan1Cent();
-    this.checkClientID();
-    this.checkTurnover();
-    // this.showData();
+  async getCommission() {
+    if (this.checkIfAmountLessThan5Cent()) return this.commission;
+    if (this.checkIfCommissionLessThan5Cent()) return this.commission;
+    if (this.checkClientID()) return this.commission;
+    await this.checkTurnover();
     return this.commission;
   }
 }
