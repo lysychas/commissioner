@@ -17,7 +17,7 @@ app.post('/transaction', function (req, res) {
   convertToEUR(reqData.currency).then((rate) => {
     const CM = new CommissionManager(
       reqData.client_id,
-      reqData.amount / rate,
+      (reqData.amount / rate).toFixed(2),
       reqData.date
     );
     CM.getCommission().then((data) =>

@@ -6,7 +6,7 @@ class CommissionManager {
     this.turnoverCommission = 0.04;
     this.turnoverAmount = 1000;
     this.amount = amount;
-    this.commission = amount * this.commissionPercentage;
+    this.commission = (amount * this.commissionPercentage).toFixed(2);
     this.clientId = clientId;
     this.date = date;
   }
@@ -14,7 +14,7 @@ class CommissionManager {
   // TODO
   // array of rules
   // vienas kintamasis atsakingas už rules
-  
+
   async showData() {
     const records = await parseCSV();
     return records;
@@ -62,7 +62,7 @@ class CommissionManager {
     if (this.checkIfCommissionLessThan5Cent()) return this.commission;
     if (this.checkClientID()) return this.commission;
     await this.checkTurnover();
-    return this.commission;
+    return Number(this.commission);
   }
 }
 
