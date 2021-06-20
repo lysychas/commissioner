@@ -9,15 +9,12 @@ class CommissionManager {
     this.commission = amount * this.commissionPercentage;
     this.clientId = clientId;
     this.date = date;
-
-    // TODO
-    // array of rules
-    // vienas kintamasis atsakingas už rules
-
-    // Validation rules
-
   }
 
+  // TODO
+  // array of rules
+  // vienas kintamasis atsakingas už rules
+  
   async showData() {
     const records = await parseCSV();
     return records;
