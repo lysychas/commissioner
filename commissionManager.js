@@ -8,7 +8,7 @@ class CommissionManager {
     this.amount = amount;
     this.commission = amount * this.commissionPercentage;
     this.clientId = clientId;
-    this.data = parseCSV()
+    this.data = parseCSV();
   }
 
   showData() {
@@ -17,9 +17,9 @@ class CommissionManager {
     });
   }
 
-  //TODO
-  //array of rules
-  //vienas kitamasis atsakingas už rules
+  // TODO
+  // array of rules
+  // vienas kitamasis atsakingas už rules
 
   checkIfLessThan1Cent() {
     if (this.commission < 0.01) {

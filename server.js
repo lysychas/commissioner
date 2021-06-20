@@ -6,13 +6,13 @@ app.use(express.json());
 
 const CommissionManager = require('./commissionManager');
 
+//ENDPOINTS
 app.get('/', function (req, res) {
   res.send('Hello World');
 });
 
 app.post('/transaction', function (req, res) {
   const reqData = req.body;
-
   convertToEUR(reqData.currency).then((rate) => {
     const CM = new CommissionManager(reqData.client_id, reqData.amount / rate);
     const commission = CM.getCommission();
@@ -23,6 +23,7 @@ app.post('/transaction', function (req, res) {
   });
 });
 
+//FUNCTIONS
 async function getRates(currency) {
   const response = await fetch('https://api.exchangerate.host/latest');
   const data = await response.json().then((data) => {
