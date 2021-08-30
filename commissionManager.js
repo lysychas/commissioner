@@ -1,4 +1,4 @@
-const parseCSV = require('./parsecsv');
+const parseCSV = require("./parsecsv");
 
 class CommissionManager {
   constructor(clientId, amount, date) {
@@ -41,19 +41,18 @@ class CommissionManager {
   }
 
   async checkTurnover() {
-    await this.showData().then((data) => {
-      const date = this.date.slice(0, -3);
-      const entryExists = typeof data[this.clientId];
-      if (entryExists != 'undefined') {
-        if (this.amount + data[this.clientId][date] >= this.turnoverAmount) {
-          this.commission = this.turnoverCommission;
-        }
-      } else {
-        if (this.amount >= this.turnoverAmount) {
-          this.commission = this.turnoverCommission;
-        }
+    const data = await this.showData();
+    const date = this.date.slice(0, -3);
+    const entryExists = typeof data[this.clientId];
+    if (entryExists != "undefined") {
+      if (this.amount + data[this.clientId][date] >= this.turnoverAmount) {
+        this.commission = this.turnoverCommission;
       }
-    });
+    } else {
+      if (this.amount >= this.turnoverAmount) {
+        this.commission = this.turnoverCommission;
+      }
+    }
     return this.commission;
   }
 
